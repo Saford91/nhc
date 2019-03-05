@@ -57,6 +57,9 @@ function nhc_job_find_users() {
         done 2>/dev/null || :
     elif [[ "$NHC_RM" == "slurm" ]]; then
 	SQUEUE_OUT=$(${SQUEUE_CMD:-/usr/bin/squeue} ${SQUEUE_NODE:--w ${HOSTNAME_S}} ${SQUEUE_FMT_ARGS:---noheader -o %u})
+        if [ $? -ne 0 ]; then
+          die 0 "Failed to get list of authoirzied users from squeue"
+        fi
         IFS=$'\n'
         USERLIST=( $SQUEUE_OUT )
         IFS=$' \t\n'
